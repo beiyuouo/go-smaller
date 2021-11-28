@@ -4,7 +4,7 @@ import logging
 import copy
 import queue
 from pygame.math import Vector2
-from gobigger.agents import BotAgent
+from .bbot import BBot
 
 
 class BaseSubmission:
@@ -25,7 +25,7 @@ class MySubmission(BaseSubmission):
         super(MySubmission, self).__init__(team_name, player_names)
         self.agents = {}
         for player_name in self.player_names:
-            self.agents[player_name] = BotAgent(name=player_name)
+            self.agents[player_name] = BBot(name=player_name)
 
     def get_actions(self, obs):
         global_state, player_states = obs
