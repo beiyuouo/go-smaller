@@ -23,6 +23,8 @@ class BBot(BotAgent):
     def __init__(self, name=None, level=4):
         super().__init__(name=name, level=level)
 
+        self.last_merge_time = 0
+
     def step(self, obs):
         if self.level == 1:
             return self.step_level_1(obs)
@@ -44,9 +46,14 @@ class BBot(BotAgent):
         clone_balls = overlap['clone']
 
         my_clone_balls, others_clone_balls = self.process_clone_balls(clone_balls)
+        total_weight = 0
+        for clone_ball in my_clone_balls:
+            total_weight += clone_ball['radius']
 
-        if len(my_clone_balls) >= 9 and my_clone_balls[4]['radius'] > 14:
+        if len(my_clone_balls) >= 16 and my_clone_balls[4][
+                'radius'] > total_weight // 5 and obs['time'] - self.last_merge_time > 16:
             self.merge_actions(my_clone_balls)
+            self.last_merge_time = obs['time']
             action_ret = self.actions_queue.get()
             return action_ret
 
@@ -58,9 +65,6 @@ class BBot(BotAgent):
             self.actions_queue.put([direction.x, direction.y, 1])
         else:
             if len(others_clone_balls) > 0:
-                if len(my_clone_balls) >= 9 and my_clone_balls[4]['radius'] > 10:
-                    self.merge_actions(my_clone_balls)
-
                 flag = False
                 for i in range(len(others_clone_balls)):
                     if others_clone_balls[i][
@@ -98,6 +102,8 @@ class BBot(BotAgent):
                     direction = (min_thorns_ball['position'] -
                                  my_clone_balls[0]['position']).normalize()
                     if min_distance > 5:
+                        self.actions_queue.put([direction.x, direction.y, -1])
+                        self.actions_queue.put([direction.x, direction.y, -1])
                         self.actions_queue.put([direction.x, direction.y, -1])
                         self.actions_queue.put([direction.x, direction.y, -1])
                         self.actions_queue.put([direction.x, direction.y, -1])
