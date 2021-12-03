@@ -97,6 +97,10 @@ class BBot(BotAgent):
                 if min_thorns_ball is not None:
                     direction = (min_thorns_ball['position'] -
                                  my_clone_balls[0]['position']).normalize()
+                    if min_distance > 5:
+                        self.actions_queue.put([direction.x, direction.y, -1])
+                        self.actions_queue.put([direction.x, direction.y, -1])
+                        self.actions_queue.put([direction.x, direction.y, -1])
                 else:
                     min_distance, min_food_ball = self.process_food_balls(
                         food_balls, my_clone_balls[0])
@@ -105,13 +109,14 @@ class BBot(BotAgent):
                                      my_clone_balls[0]['position']).normalize()
                     else:
                         direction = (Vector2(0, 0) - my_clone_balls[0]['position']).normalize()
-                action_random = random.random()
-                if action_random < 0.02:
-                    action_type = 1
-                elif action_random < 0.04 and action_random > 0.02:
-                    action_type = 2
-                else:
-                    action_type = -1
+                # action_random = random.random()
+                # if action_random < 0.02:
+                #     action_type = 1
+                # elif action_random < 0.04 and action_random > 0.02:
+                #     action_type = 2
+                # else:
+                #     action_type = -1
+                action_type = -1
                 # direction = self.add_noise_to_direction(direction)
                 self.actions_queue.put([direction.x, direction.y, action_type])
 
@@ -158,13 +163,15 @@ class BBot(BotAgent):
         self.actions_queue.put([None, None, -1])
         self.actions_queue.put([None, None, -1])
         self.actions_queue.put([None, None, -1])
-        centroid = self.get_centroid(my_clone_balls)
-        direction = (centroid - my_clone_balls[0]['position']).normalize()
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
-        self.actions_queue.put([direction.x, direction.y, 0])
+        self.actions_queue.put([None, None, -1])
+        self.actions_queue.put([None, None, -1])
+        # centroid = self.get_centroid(my_clone_balls)
+        # direction = (centroid - my_clone_balls[0]['position']).normalize()
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
+        # self.actions_queue.put([direction.x, direction.y, 0])
